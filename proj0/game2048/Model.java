@@ -139,7 +139,7 @@ public class Model extends Observable {
     public static boolean emptySpaceExists(Board b) {
         // TODO: Fill in this function.
 
-        for (int i = 0 ; i < b.size() ; i ++)
+        for (int i = 0 ; i < b.size() ; i++)
         {
             for(int j = 0 ; j < b.size() ; j++)
             {
@@ -156,7 +156,7 @@ public class Model extends Observable {
      */
     public static boolean maxTileExists(Board b) {
         // TODO: Fill in this function.
-        for (int i = 0 ; i < b.size() ; i ++)
+        for (int i = 0 ; i < b.size() ; i++)
         {
             for(int j = 0 ; j < b.size() ; j++)
             {
@@ -174,8 +174,48 @@ public class Model extends Observable {
      */
     public static boolean atLeastOneMoveExists(Board b) {
         // TODO: Fill in this function.
+        boolean thereIsEmptyCell = emptySpaceExists(b);
+        boolean twoValuesWithSameNumber = twoNeighborValues(b);
+        return (thereIsEmptyCell | twoValuesWithSameNumber);
+    }
+
+    public static boolean twoNeighborValues(Board b)
+    {
+        for (int i = 0 ; i < b.size() ; i++)
+        {
+            for(int j = 0 ; j < b.size() ; j++)
+            {
+                if(haveRightNeighbor(i,j,b.size()) && b.tile(i , j).value() == b.tile(i , j + 1).value())return true;
+                if(haveLeftNeighbor(i,j,b.size()) && b.tile(i , j).value() == b.tile(i , j - 1).value())return true;
+                if(haveUpNeighbor(i,j,b.size()) && b.tile(i , j).value() == b.tile(i - 1 , j).value())return true;
+                if(haveDownNeighbor(i,j,b.size()) && b.tile(i , j).value() == b.tile(i + 1 , j + 1).value())return true;
+            }
+        }
         return false;
     }
+    public static boolean haveRightNeighbor(int i , int j , int size)
+    {
+        if(j < size - 1)return true;
+        return false;
+    }
+    public static boolean haveLeftNeighbor(int i , int j , int size)
+    {
+        if(j > 0)return true;
+        return false;
+    }
+
+    public static boolean haveDownNeighbor(int i , int j , int size)
+    {
+        if(i < size - 1)return true;
+        return false;
+    }
+
+    public static boolean haveUpNeighbor(int i , int j , int size)
+    {
+        if(i > 0)return true;
+        return false;
+    }
+
 
 
     @Override
