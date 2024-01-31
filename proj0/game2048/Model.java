@@ -160,7 +160,7 @@ public class Model extends Observable {
         {
             for(int j = 0 ; j < b.size() ; j++)
             {
-                if(b.tile(i , j).value() == MAX_PIECE)return true;
+                if(b.tile(i , j) != null && b.tile(i , j).value() == MAX_PIECE)return true;
             }
         }
         return false;
@@ -175,8 +175,9 @@ public class Model extends Observable {
     public static boolean atLeastOneMoveExists(Board b) {
         // TODO: Fill in this function.
         boolean thereIsEmptyCell = emptySpaceExists(b);
+        if(thereIsEmptyCell)return true;
         boolean twoValuesWithSameNumber = twoNeighborValues(b);
-        return (thereIsEmptyCell | twoValuesWithSameNumber);
+        return twoValuesWithSameNumber;
     }
 
     public static boolean twoNeighborValues(Board b)
@@ -188,7 +189,7 @@ public class Model extends Observable {
                 if(haveRightNeighbor(i,j,b.size()) && b.tile(i , j).value() == b.tile(i , j + 1).value())return true;
                 if(haveLeftNeighbor(i,j,b.size()) && b.tile(i , j).value() == b.tile(i , j - 1).value())return true;
                 if(haveUpNeighbor(i,j,b.size()) && b.tile(i , j).value() == b.tile(i - 1 , j).value())return true;
-                if(haveDownNeighbor(i,j,b.size()) && b.tile(i , j).value() == b.tile(i + 1 , j + 1).value())return true;
+                if(haveDownNeighbor(i,j,b.size()) && b.tile(i , j).value() == b.tile(i + 1 , j).value())return true;
             }
         }
         return false;
