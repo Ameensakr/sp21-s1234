@@ -1,5 +1,7 @@
 package deque;
 
+import afu.org.checkerframework.checker.igj.qual.I;
+
 public class ArrayDeque <T> {
     private int f , l;
     private T[] array;
@@ -7,9 +9,9 @@ public class ArrayDeque <T> {
     public ArrayDeque()
     {
         size = 0;
-        capacity = 1;
+        capacity = 8;
         array = (T[]) new Object[capacity];
-        f = 0;
+        f = 7;
         l = 0;
     }
 
@@ -27,7 +29,7 @@ public class ArrayDeque <T> {
             capacityTrick(capacity * 2);
         }
         array[f] = item;
-        f--;
+        f = sube(f , 1);
         size++;
     }
     public void addLast(T item)
@@ -37,15 +39,13 @@ public class ArrayDeque <T> {
             capacityTrick(capacity * 2);
         }
         array[l] = item;
-        l++;
+        l = (l + 1);
         size++;
     }
 
     public boolean isEmpty()
     {
-        if(size == 0)
-        return true;
-        return false;
+        return (size == 0);
     }
 
     public int size()
@@ -56,11 +56,12 @@ public class ArrayDeque <T> {
     public void printDeque()
     {
         if(isEmpty())return;
-        int idx = add(f , 1);
+        int idx = (f + 1)%capacity;
+        print(idx);
         for (int i = 0 ; i < size ; i++)
         {
             System.out.print(array[idx] + " ");
-            idx = add(idx , 1);
+            idx = (idx + 1)%capacity;
         }
         System.out.println();
     }
@@ -70,60 +71,57 @@ public class ArrayDeque <T> {
         return ((((a%capacity) - (b%capacity))%capacity)+capacity)%capacity;
     }
 
-    private int add(int a , int b)
-    {
-        return ((a%capacity) + (b%capacity))%capacity;
-    }
 
-    public T removeFirst()
-    {
-        if(isEmpty())return null;
-        T temp = array[add(f , 1)];
-        f = add(f , 1);
-        size--;
-        is_waste_memory();
-        return temp;
-    }
+
+
 
     private void is_waste_memory()
     {
-        double p = size;
-        p = p / capacity;
-
-        if(p < 0.25)
+        double p = capacity;
+        p = p / size;
+        if(p >= 4)
         {
+
             capacityTrick(capacity / 2);
         }
 
     }
 
-
-
     private void capacityTrick(int newCapacity) // I want to copy first l element to the front of the new array & copy the last f elements from the old array to the new array
     {
+        int old = capacity;
         capacity = newCapacity;
         T[] temp = (T[]) new Object[capacity];
-        for (int i = 0; i < l ; i++)
+        int idx = (f + 1)%old;
+        int i = 0;
+        for(int p = 0 ; p < size ; p++)
         {
-            temp[i] = array[i];
+            temp[i] = array[idx];
+            idx = (idx + 1)%old;
+            i++;
         }
-        int idx = capacity - 1;
-        for (int i = size - 1 ; i > f ; i--)
-        {
-            temp[idx] = array[i];
-            idx--;
-        }
-        f = idx;
+        f = capacity - 1;
+        l = size;
         array = temp;
     }
 
     public T removeLast()
     {
         if(isEmpty())return null;
-        T temp = array[sube(l , 1)];
-        l = sube(l , 1);
-        size--;
         is_waste_memory();
+        l = sube(l , 1);
+        T temp = array[l];
+        size--;
+        return temp;
+    }
+
+    public T removeFirst()
+    {
+        if(isEmpty())return null;
+        is_waste_memory();
+        f = (f + 1) % capacity;
+        T temp = array[f];
+        size--;
         return temp;
     }
 
@@ -136,6 +134,8 @@ public class ArrayDeque <T> {
     {
         return capacity;
     }
+
+
     
 
 
