@@ -63,12 +63,12 @@ public class ArrayDeque <T> {
         System.out.println();
     }
 
-    int sube(int a , int b)
+    private int sube(int a , int b)
     {
         return ((((a%capacity) - (b%capacity))%capacity)+capacity)%capacity;
     }
 
-    int add(int a , int b)
+    private int add(int a , int b)
     {
         return ((a%capacity) + (b%capacity))%capacity;
     }
@@ -79,6 +79,7 @@ public class ArrayDeque <T> {
         T temp = array[add(f , 1)];
         f = add(f , 1);
         size--;
+        is_waste_memory();
         return temp;
     }
 
