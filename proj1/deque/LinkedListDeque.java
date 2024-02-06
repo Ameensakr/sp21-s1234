@@ -18,7 +18,7 @@ public class LinkedListDeque <T> {
     private Item dummy;
     private int size;
 
-    LinkedListDeque()
+    public LinkedListDeque()
     {
         dummy = new Item(null);
         dummy.next = dummy;
@@ -94,6 +94,8 @@ public class LinkedListDeque <T> {
         }
         return temp.first;
     }
+
+
 
 
 
