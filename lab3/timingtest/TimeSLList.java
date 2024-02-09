@@ -1,6 +1,8 @@
 package timingtest;
 import edu.princeton.cs.algs4.Stopwatch;
 
+import java.util.concurrent.atomic.AtomicLong;
+
 /**
  * Created by hug.
  */
@@ -22,11 +24,25 @@ public class TimeSLList {
     }
 
     public static void timeGetLast() {
+
+
         SLList<Integer> sl = new SLList<>();
+        int N = 50;
+        for (int i = 0; i < N ; i++)
+        {
+            sl.addLast(i);
+        }
         Stopwatch st = new Stopwatch();
-        for (int i = 1; i <= 10 ; i++)sl.addLast(i);
+        int M = 10;
+        for (int i = 0; i <= M ; i++)sl.getLast();
         Double time = st.elapsedTime();
-        System.out.println(time);
+        AList<Integer>Ns = new AList<>();
+        AList<Double>t = new AList<>();
+        AList<Integer>op = new AList<>();
+        Ns.addLast(M);
+        t.addLast(time);
+        op.addLast(M);
+        printTimingTable(Ns , t , op);
     }
 
 }
