@@ -24,7 +24,7 @@ public class TimeSLList {
     public static void timeGetLast() {
         SLList<Integer> sl = new SLList<>();
         Stopwatch st = new Stopwatch();
-        for (int i = 1; i <= 1000000 ; i++)sl.addLast(i);
+        for (int i = 1; i <= 10 ; i++)sl.addLast(i);
         Double time = st.elapsedTime();
         System.out.println(time);
     }
