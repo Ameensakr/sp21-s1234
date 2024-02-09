@@ -39,7 +39,7 @@ public class TimeSLList {
         AList<Integer>Ns = new AList<>();
         AList<Double>t = new AList<>();
         AList<Integer>op = new AList<>();
-        Ns.addLast(M);
+        Ns.addLast(N);
         t.addLast(time);
         op.addLast(M);
         printTimingTable(Ns , t , op);
