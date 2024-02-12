@@ -1,7 +1,6 @@
 package deque;
 
-
-import java.awt.*;
+import java.util.Iterator;
 
 public class ArrayDeque <T> implements Deque<T> {
     private int f , l;
@@ -128,18 +127,65 @@ public class ArrayDeque <T> implements Deque<T> {
         return capacity;
     }
 
-
-    public static void main(String[] args)
-    {
-        ArrayDeque<Integer> de = new ArrayDeque<>();
-        for (int i = 0; i < 1000 ; i++)
-        {
-            de.addLast(i);
-
-        }
-        System.out.println(de.getCapacity());
-
+    public Iterator<T> iterator() {
+        return new ArrayDequeIterator();
     }
+
+    private class ArrayDequeIterator implements Iterator<T> {
+        private int wizPos;
+
+        public ArrayDequeIterator() {
+            wizPos = 0;
+        }
+
+        public boolean hasNext() {
+            return wizPos < size;
+        }
+
+        public T next() {
+            T returnItem = array[wizPos];
+            wizPos += 1;
+            return returnItem;
+        }
+    }
+    public boolean equals(Object o)
+    {
+        if(o instanceof ArrayDeque p)
+        {
+            //check the 2 deqeu with same size
+            if(this.size() != p.size())
+            {
+                return false;
+            }
+            for(T x : this)
+            {
+                if(!p.find(x))return false;
+            }
+            return true;
+        }
+        return false;
+    }
+
+    public boolean find(T item)
+    {
+        for (int i = 0 ; i < size ; i++)
+        {
+            if(array[i] == item)return true;
+        }
+        return false;
+    }
+
+//    public static void main(String[] args)
+//    {
+//        ArrayDeque<Integer> de = new ArrayDeque<>();
+//        for (int i = 0; i < 1000 ; i++)
+//        {
+//            de.addLast(i);
+//
+//        }
+//        System.out.println(de.getCapacity());
+//
+//    }
 
 
     

@@ -1,5 +1,6 @@
 package deque;
 
+import java.util.Iterator;
 import java.util.stream.StreamSupport;
 
 public class LinkedListDeque <T> implements Deque<T> {
@@ -89,6 +90,63 @@ public class LinkedListDeque <T> implements Deque<T> {
             temp = temp.next;
         }
         return temp.first;
+    }
+
+
+    public Iterator<T> iterator() {
+        return new ArraySetIterator();
+    }
+
+
+    private class ArraySetIterator implements Iterator<T> {
+        private int wizPos;
+
+        public ArraySetIterator() {
+            wizPos = 0;
+        }
+
+        public boolean hasNext() {
+            return wizPos < size;
+        }
+
+        public T next() {
+            T returnItem = get(wizPos);
+            wizPos += 1;
+            return returnItem;
+        }
+    }
+
+
+    public boolean find(T item)
+    {
+        Item temp = dummy.next;
+        for(int i = 0; i < size ; i += 1)
+        {
+            if(temp.first != item)return false;
+
+            temp = temp.next;
+        }
+        return true;
+    }
+
+
+
+    public boolean equals(Object o)
+    {
+        if(o instanceof ArrayDeque p)
+        {
+            //check the 2 deqeu with same size
+            if(this.size() != p.size())
+            {
+                return false;
+            }
+            for(T x : this)
+            {
+                if(!p.find(x))return false;
+            }
+            return true;
+        }
+        return false;
     }
 
 
