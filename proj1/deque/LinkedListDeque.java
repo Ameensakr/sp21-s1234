@@ -93,62 +93,12 @@ public class LinkedListDeque <T> implements Deque<T> {
     }
 
 
-    public Iterator<T> iterator() {
-        return new ArraySetIterator();
-    }
-
-
-    private class ArraySetIterator implements Iterator<T> {
-        private int wizPos;
-
-        public ArraySetIterator() {
-            wizPos = 0;
-        }
-
-        public boolean hasNext() {
-            return wizPos < size;
-        }
-
-        public T next() {
-            T returnItem = get(wizPos);
-            wizPos += 1;
-            return returnItem;
-        }
-    }
-
-
-    public boolean find(T item)
-    {
-        Item temp = dummy.next;
-        for(int i = 0; i < size ; i += 1)
-        {
-            if(temp.first == item)return true;
-
-            temp = temp.next;
-        }
-        return false;
-    }
 
 
 
-    public boolean equals(Object o)
-    {
-        if(o instanceof LinkedListDeque)
-        {
-            Deque<T> p = (Deque<T>) o;
-            //check the 2 deqeu with same size
-            if(this.size() != p.size())
-            {
-                return false;
-            }
-            for(T x : this)
-            {
-                if(!p.find(x))return false;
-            }
-            return true;
-        }
-        return false;
-    }
+
+
+
 
 
 
