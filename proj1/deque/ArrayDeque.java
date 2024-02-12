@@ -152,7 +152,7 @@ public class ArrayDeque <T> implements Deque<T> , Iterable<T>{
     {
         if(o instanceof ArrayDeque)
         {
-            Deque<T> p = (Deque<T>) o;
+            Deque p = (Deque) o;
             //check the 2 deqeu with same size
             if(this.size() != p.size())
             {
