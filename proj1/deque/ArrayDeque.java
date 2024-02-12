@@ -9,9 +9,9 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
 
     public ArrayDeque() {
         size = 0;
-        capacity = 100;
+        capacity = 8;
         array = (T[]) new Object[capacity];
-        f = 99;
+        f = 7;
         l = 0;
     }
 
@@ -61,7 +61,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
     private void is_waste_memory() {
         double p = capacity;
         p = p / 4;
-        if (p >= size) {
+        if (p >= size && capacity >= 16) {
 
             capacityTrick(capacity / 2);
         }
