@@ -36,7 +36,7 @@ public class TestArrayDequeEC {
                 size--;
                 Integer ex = expected.removeFirst();
                 Integer o = out.removeFirst();
-                st.append("removeFirst()");
+                st.append("removeFirst()\n");
                 assertEquals(st.toString() , ex , o);
             } else {
                 // remove last
@@ -44,7 +44,7 @@ public class TestArrayDequeEC {
                 size--;
                 Integer ex = expected.removeLast();
                 Integer o = out.removeLast();
-                st.append("removeLast()");
+                st.append("removeLast()\n");
                 assertEquals( st.toString() , ex, o);
             }
         }
@@ -62,7 +62,6 @@ public class TestArrayDequeEC {
 
             if (type == 0) {
                 // add last
-
                 size++;
                 int num = StdRandom.uniform(8000);
                 st.append("addLast(" + num + ')' + '\n');
@@ -80,14 +79,14 @@ public class TestArrayDequeEC {
                 // remove first
                 Integer ex = expected.removeFirst();
                 Integer o = out.removeFirst();
-                st.append("removeFirst()");
+                st.append("removeFirst()\n");
                 assertEquals(st.toString() , ex , o);
             } else {
                 // remove last
                 if (size == 0) continue;
                 Integer ex = expected.removeLast();
                 Integer o = out.removeLast();
-                st.append("removeLast()");
+                st.append("removeLast()\n");
                 assertEquals( st.toString() , ex, o);
             }
         }
