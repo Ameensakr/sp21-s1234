@@ -159,8 +159,12 @@ public class ArrayDeque <T> implements Deque<T> {
             }
             for(T x : this)
             {
-                if(!p.find(x))return false;
+                if(!p.find(x))
+                {
+                    return false;
+                }
             }
+
             return true;
         }
         return false;
@@ -177,13 +181,11 @@ public class ArrayDeque <T> implements Deque<T> {
 
 //    public static void main(String[] args)
 //    {
-//        ArrayDeque<Integer> de = new ArrayDeque<>();
-//        for (int i = 0; i < 1000 ; i++)
-//        {
-//            de.addLast(i);
+//        ArrayDeque<String> de = new ArrayDeque<>();
+//        ArrayDeque<String> de2 = new ArrayDeque<>();
 //
-//        }
-//        System.out.println(de.getCapacity());
+//
+//        System.out.println(de.equals(de2));
 //
 //    }
 

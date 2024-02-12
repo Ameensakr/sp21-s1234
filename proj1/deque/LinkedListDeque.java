@@ -122,18 +122,18 @@ public class LinkedListDeque <T> implements Deque<T> {
         Item temp = dummy.next;
         for(int i = 0; i < size ; i += 1)
         {
-            if(temp.first != item)return false;
+            if(temp.first == item)return true;
 
             temp = temp.next;
         }
-        return true;
+        return false;
     }
 
 
 
     public boolean equals(Object o)
     {
-        if(o instanceof ArrayDeque p)
+        if(o instanceof LinkedListDeque p)
         {
             //check the 2 deqeu with same size
             if(this.size() != p.size())
