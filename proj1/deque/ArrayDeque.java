@@ -1,16 +1,18 @@
 package deque;
 
 
-public class ArrayDeque <T> {
+import java.awt.*;
+
+public class ArrayDeque <T> implements Deque<T> {
     private int f , l;
     private T[] array;
     private int size  , capacity ;
     public ArrayDeque()
     {
         size = 0;
-        capacity = 8;
+        capacity = 100;
         array = (T[]) new Object[capacity];
-        f = 7;
+        f = 99;
         l = 0;
     }
 
@@ -38,14 +40,10 @@ public class ArrayDeque <T> {
             capacityTrick(capacity * 2);
         }
         array[l] = item;
-        l = (l + 1);
+        l = (l + 1) % capacity;
         size++;
     }
 
-    public boolean isEmpty()
-    {
-        return (size == 0);
-    }
 
     public int size()
     {
@@ -69,10 +67,6 @@ public class ArrayDeque <T> {
     {
         return ((((a%capacity) - (b%capacity))%capacity)+capacity)%capacity;
     }
-
-
-
-
 
     private void is_waste_memory()
     {
@@ -132,6 +126,19 @@ public class ArrayDeque <T> {
     public int getCapacity()
     {
         return capacity;
+    }
+
+
+    public static void main(String[] args)
+    {
+        ArrayDeque<Integer> de = new ArrayDeque<>();
+        for (int i = 0; i < 1000 ; i++)
+        {
+            de.addLast(i);
+
+        }
+        System.out.println(de.getCapacity());
+
     }
 
 

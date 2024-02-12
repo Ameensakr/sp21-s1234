@@ -2,7 +2,7 @@ package deque;
 
 import java.util.stream.StreamSupport;
 
-public class LinkedListDeque <T> {
+public class LinkedListDeque <T> implements Deque<T> {
 
     public class Item {
         private T first;
@@ -44,10 +44,6 @@ public class LinkedListDeque <T> {
         size += 1;
     }
 
-    public boolean isEmpty()
-    {
-        return (size == 0); // if size equal zero will return true otherwise will return false
-    }
 
     public int size()
     {
