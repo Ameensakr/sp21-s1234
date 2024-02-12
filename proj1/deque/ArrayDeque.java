@@ -2,12 +2,12 @@ package deque;
 
 import java.util.Iterator;
 
-public class ArrayDeque <T> implements Deque<T> , Iterable<T>{
-    private int f , l;
+public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
+    private int f, l;
     private T[] array;
-    private int size  , capacity ;
-    public ArrayDeque()
-    {
+    private int size, capacity;
+
+    public ArrayDeque() {
         size = 0;
         capacity = 100;
         array = (T[]) new Object[capacity];
@@ -15,27 +15,22 @@ public class ArrayDeque <T> implements Deque<T> , Iterable<T>{
         l = 0;
     }
 
-    public void print(int x)
-    {
+    public void print(int x) {
         System.out.println(x);
     }
 
 
-
-    public void addFirst(T item)
-    {
-        if(size == capacity)
-        {
+    public void addFirst(T item) {
+        if (size == capacity) {
             capacityTrick(capacity * 2);
         }
         array[f] = item;
-        f = sube(f , 1);
+        f = sube(f, 1);
         size++;
     }
-    public void addLast(T item)
-    {
-        if(size == capacity)
-        {
+
+    public void addLast(T item) {
+        if (size == capacity) {
             capacityTrick(capacity * 2);
         }
         array[l] = item;
@@ -44,35 +39,29 @@ public class ArrayDeque <T> implements Deque<T> , Iterable<T>{
     }
 
 
-    public int size()
-    {
+    public int size() {
         return size;
     }
 
-    public void printDeque()
-    {
-        if(isEmpty())return;
-        int idx = (f + 1)%capacity;
+    public void printDeque() {
+        if (isEmpty()) return;
+        int idx = (f + 1) % capacity;
         print(idx);
-        for (int i = 0 ; i < size ; i++)
-        {
+        for (int i = 0; i < size; i++) {
             System.out.print(array[idx] + " ");
-            idx = (idx + 1)%capacity;
+            idx = (idx + 1) % capacity;
         }
         System.out.println();
     }
 
-    private int sube(int a , int b)
-    {
-        return ((((a%capacity) - (b%capacity))%capacity)+capacity)%capacity;
+    private int sube(int a, int b) {
+        return ((((a % capacity) - (b % capacity)) % capacity) + capacity) % capacity;
     }
 
-    private void is_waste_memory()
-    {
+    private void is_waste_memory() {
         double p = capacity;
         p = p / size;
-        if(p >= 4)
-        {
+        if (p >= 4) {
 
             capacityTrick(capacity / 2);
         }
@@ -84,12 +73,11 @@ public class ArrayDeque <T> implements Deque<T> , Iterable<T>{
         int old = capacity;
         capacity = newCapacity;
         T[] temp = (T[]) new Object[capacity];
-        int idx = (f + 1)%old;
+        int idx = (f + 1) % old;
         int i = 0;
-        for(int p = 0 ; p < size ; p++)
-        {
+        for (int p = 0; p < size; p++) {
             temp[i] = array[idx];
-            idx = (idx + 1)%old;
+            idx = (idx + 1) % old;
             i++;
         }
         f = capacity - 1;
@@ -97,19 +85,17 @@ public class ArrayDeque <T> implements Deque<T> , Iterable<T>{
         array = temp;
     }
 
-    public T removeLast()
-    {
-        if(isEmpty())return null;
+    public T removeLast() {
+        if (isEmpty()) return null;
         is_waste_memory();
-        l = sube(l , 1);
+        l = sube(l, 1);
         T temp = array[l];
         size--;
         return temp;
     }
 
-    public T removeFirst()
-    {
-        if(isEmpty())return null;
+    public T removeFirst() {
+        if (isEmpty()) return null;
         is_waste_memory();
         f = (f + 1) % capacity;
         T temp = array[f];
@@ -117,13 +103,12 @@ public class ArrayDeque <T> implements Deque<T> , Iterable<T>{
         return temp;
     }
 
-    public T get(int index)
-    {
-        if(index >= size)return null;
-        return array[(f + 1 + index)%capacity];
+    public T get(int index) {
+        if (index >= size) return null;
+        return array[(f + 1 + index) % capacity];
     }
-    public int getCapacity()
-    {
+
+    public int getCapacity() {
         return capacity;
     }
 
@@ -148,43 +133,21 @@ public class ArrayDeque <T> implements Deque<T> , Iterable<T>{
             return returnItem;
         }
     }
-    public boolean equals(Object o)
-    {
-        if(o instanceof ArrayDeque)
-        {
+
+    public boolean equals(Object o) {
+        if (o instanceof ArrayDeque) {
             Deque p = (Deque) o;
             //check the 2 deqeu with same size
-            if(this.size() != p.size())
-            {
+            if (this.size() != p.size()) {
                 return false;
             }
-            for(T x : this)
-            {
-                if(!p.contain(x))
-                {
-                    return false;
-                }
+            for (int i = 0; i < size(); i++) {
+                if (get(i) != p.get(i))return false;
             }
-
             return true;
         }
         return false;
     }
-
-    public boolean contain(T item)
-    {
-        for (int i = 0 ; i < size ; i++)
-        {
-            if(array[i] == item)return true;
-        }
-        return false;
-    }
-
-
-
-
-    
-
 
 
 }

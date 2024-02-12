@@ -130,17 +130,7 @@ public class LinkedListDeque <T> implements Deque<T> , Iterable<T> {
     }
 
 
-    public boolean contain(T item)
-    {
-        Item temp = dummy.next;
-        for(int i = 0; i < size ; i += 1)
-        {
-            if(temp.first == item)return true;
 
-            temp = temp.next;
-        }
-        return false;
-    }
 
 
 
@@ -154,9 +144,8 @@ public class LinkedListDeque <T> implements Deque<T> , Iterable<T> {
             {
                 return false;
             }
-            for(T x : this)
-            {
-                if(!p.contain(x))return false;
+            for (int i = 0; i < size(); i++) {
+                if (get(i) != p.get(i))return false;
             }
             return true;
         }
