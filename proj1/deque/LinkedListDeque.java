@@ -5,7 +5,7 @@ import java.util.stream.StreamSupport;
 
 public class LinkedListDeque <T> implements Deque<T> , Iterable<T> {
 
-    public class Item {
+    private class Item {
         private T first;
 
         private Item next , prev; // to point to the node next of U and before U
@@ -145,7 +145,7 @@ public class LinkedListDeque <T> implements Deque<T> , Iterable<T> {
                 return false;
             }
             for (int i = 0; i < size(); i++) {
-                if (get(i) != p.get(i))return false;
+                if (!(get(i).equals(p.get(i))))return false;
             }
             return true;
         }

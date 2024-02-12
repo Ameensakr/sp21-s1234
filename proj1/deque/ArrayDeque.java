@@ -15,7 +15,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
         l = 0;
     }
 
-    public void print(int x) {
+    private void print(int x) {
         System.out.println(x);
     }
 
@@ -108,7 +108,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
         return array[(f + 1 + index) % capacity];
     }
 
-    public int getCapacity() {
+    private int getCapacity() {
         return capacity;
     }
 
@@ -142,7 +142,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
                 return false;
             }
             for (int i = 0; i < size(); i++) {
-                if (get(i) != p.get(i))return false;
+                if (!(get(i).equals(p.get(i))))return false;
             }
             return true;
         }
