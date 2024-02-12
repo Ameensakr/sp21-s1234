@@ -92,6 +92,19 @@ public class LinkedListDeque <T> implements Deque<T> , Iterable<T> {
         return temp.first;
     }
 
+    private T go(Item x, int idx) {
+        if (idx == 0) {
+            return x.first;
+        }
+        return go(x.next, idx - 1);
+    }
+
+    public T getRecursive(int index) {
+        Item p = dummy.next;
+        return go(p, index);
+    }
+
+
 
     public Iterator<T> iterator() {
         return new ArraySetIterator();
@@ -117,7 +130,7 @@ public class LinkedListDeque <T> implements Deque<T> , Iterable<T> {
     }
 
 
-    public boolean find(T item)
+    public boolean contain(T item)
     {
         Item temp = dummy.next;
         for(int i = 0; i < size ; i += 1)
@@ -143,7 +156,7 @@ public class LinkedListDeque <T> implements Deque<T> , Iterable<T> {
             }
             for(T x : this)
             {
-                if(!p.find(x))return false;
+                if(!p.contain(x))return false;
             }
             return true;
         }

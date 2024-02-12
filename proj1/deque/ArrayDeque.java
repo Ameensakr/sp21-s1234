@@ -2,7 +2,7 @@ package deque;
 
 import java.util.Iterator;
 
-public class ArrayDeque <T> implements Deque<T>, Iterable<T>  {
+public class ArrayDeque <T> implements Deque<T> , Iterable<T>{
     private int f , l;
     private T[] array;
     private int size  , capacity ;
@@ -160,7 +160,7 @@ public class ArrayDeque <T> implements Deque<T>, Iterable<T>  {
             }
             for(T x : this)
             {
-                if(!p.find(x))
+                if(!p.contain(x))
                 {
                     return false;
                 }
@@ -171,7 +171,7 @@ public class ArrayDeque <T> implements Deque<T>, Iterable<T>  {
         return false;
     }
 
-    public boolean find(T item)
+    public boolean contain(T item)
     {
         for (int i = 0 ; i < size ; i++)
         {
@@ -181,18 +181,6 @@ public class ArrayDeque <T> implements Deque<T>, Iterable<T>  {
     }
 
 
-
-
-
-//    public static void main(String[] args)
-//    {
-//        ArrayDeque<String> de = new ArrayDeque<>();
-//        ArrayDeque<String> de2 = new ArrayDeque<>();
-//
-//
-//        System.out.println(de.equals(de2));
-//
-//    }
 
 
     
