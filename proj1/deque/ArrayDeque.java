@@ -60,8 +60,8 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
 
     private void is_waste_memory() {
         double p = capacity;
-        p = p / size;
-        if (p >= 4) {
+        p = p / 4;
+        if (p >= size) {
 
             capacityTrick(capacity / 2);
         }
@@ -135,7 +135,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
     }
 
     public boolean equals(Object o) {
-        if (o instanceof ArrayDeque) {
+        if (o instanceof Deque) {
             Deque p = (Deque) o;
             //check the 2 deqeu with same size
             if (this.size() != p.size()) {
