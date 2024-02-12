@@ -150,8 +150,9 @@ public class ArrayDeque <T> implements Deque<T> {
     }
     public boolean equals(Object o)
     {
-        if(o instanceof ArrayDeque p)
+        if(o instanceof ArrayDeque)
         {
+            Deque<T> p = (Deque<T>) o;
             //check the 2 deqeu with same size
             if(this.size() != p.size())
             {

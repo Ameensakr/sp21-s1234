@@ -133,8 +133,9 @@ public class LinkedListDeque <T> implements Deque<T> {
 
     public boolean equals(Object o)
     {
-        if(o instanceof LinkedListDeque p)
+        if(o instanceof LinkedListDeque)
         {
+            Deque<T> p = (Deque<T>) o;
             //check the 2 deqeu with same size
             if(this.size() != p.size())
             {
