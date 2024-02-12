@@ -9,7 +9,7 @@ import student.StudentArrayDeque;
 public class TestArrayDequeEC {
     @Test
     public void test1() {
-        ArrayDequeSolution<Integer> out = new ArrayDequeSolution<>();
+        StudentArrayDeque<Integer> out = new StudentArrayDeque<>();
         ArrayDequeSolution<Integer> expected = new ArrayDequeSolution<>();
         int size = 0;
         StringBuilder st = new StringBuilder();
