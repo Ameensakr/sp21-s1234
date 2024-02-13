@@ -6,7 +6,7 @@ Developed and implemented efficient Deque data structures utilizing both linked 
 To read more about Deque: [Deque](https://en.wikipedia.org/wiki/Double-ended_queue)
 
 
-I generate test cases with random operations using `StdRandom` function that helps me to make everything in random way and i use `JUnit library` to print to user useful massage to understand what is the error.
+generated tests using random operations using the `StdRandom` function that helps me to make everything randomly. Use `JUnit library` to print to user useful message to understand what is the error.
 
 ## Methods
 1. `addFirst`: Adds an item to the front of the deque in O(1).
