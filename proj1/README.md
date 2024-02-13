@@ -1,7 +1,7 @@
 # Deque
 
 ## Overview
-A dynamic efficient data structure that executes several operations rapidly, used a sentinel node to make the deque cyclic so it's easier to delete and insert objects. Implemented the iterable interface so the user can iterate through the deque elements.
+A dynamic efficient data structure that executes several operations rapidly, uses a sentinel node to make the deque cyclic so it's easier to delete and insert objects. Implemented the iterable interface so the user can iterate through the deque elements.
 
 ## Methods
 1. `addFirst`: Adds an item to the front of the deque.
