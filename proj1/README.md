@@ -1,7 +1,8 @@
 # Deque
 
 ## Overview
-A dynamic efficient data structure that executes several operations rapidly, uses a sentinel node to make the deque cyclic so it's easier to delete and insert objects. Implemented the iterable interface so the user can iterate through the deque elements.
+A double-ended queue, also known as deque, is a linear data structure — or more abstractly an ordered collection of items. Deques are a generalization of the queue data structure. Therefore, elements can be added to the back and removed at the front. However, deques can also add elements to the front and remove them from the back, which distinguishes them from queues. In other words, deques are less restricted when adding and removing elements.
+to read more about Deque: https://en.wikipedia.org/wiki/Double-ended_queue#:~:text=the%20technical%20details.%20(-,April%202022),)%20or%20back%20(tail).
 
 ## Methods
 1. `addFirst`: Adds an item to the front of the deque.
