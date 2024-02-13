@@ -1,7 +1,7 @@
 # Deque
 
 ## Overview
-A double-ended queue, also known as deque, is a linear data structure — or more abstractly an ordered collection of items. Deques are a generalization of the queue data structure. Therefore, elements can be added to the back and removed at the front. However, deques can also add elements to the front and remove them from the back, which distinguishes them from queues. In other words, deques are less restricted when adding and removing elements.
+Developed and implemented efficient Deque data structures utilizing both linked list and array-based approaches, optimizing performance for various use cases.
 
 To read more about Deque: [Deque](https://en.wikipedia.org/wiki/Double-ended_queue)
 
