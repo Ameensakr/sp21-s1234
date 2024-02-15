@@ -2,8 +2,13 @@ package deque;
 
 import java.util.Iterator;
 
+<<<<<<< HEAD
 public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
     private int f, l;
+=======
+public class ArrayDeque <T> implements Deque<T> , Iterable<T> {
+    private int f , l;
+>>>>>>> feature
     private T[] array;
     private int size, capacity;
 
@@ -115,6 +120,60 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
     public Iterator<T> iterator() {
         return new ArrayDequeIterator();
     }
+<<<<<<< HEAD
+=======
+
+    private class ArrayDequeIterator implements Iterator<T> {
+        private int wizPos;
+
+        public ArrayDequeIterator() {
+            wizPos = 0;
+        }
+
+        public boolean hasNext() {
+            return wizPos < size;
+        }
+
+        public T next() {
+            T returnItem = array[wizPos];
+            wizPos += 1;
+            return returnItem;
+        }
+    }
+    public boolean equals(Object o)
+    {
+        if(o instanceof ArrayDeque)
+        {
+            Deque<T> p = (Deque<T>) o;
+            //check the 2 deqeu with same size
+            if(this.size() != p.size())
+            {
+                return false;
+            }
+            for(T x : this)
+            {
+                if(!p.find(x))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+        return false;
+    }
+
+    public boolean find(T item)
+    {
+        for (int i = 0 ; i < size ; i++)
+        {
+            if(array[i] == item)return true;
+        }
+        return false;
+    }
+
+
+>>>>>>> feature
 
     private class ArrayDequeIterator implements Iterator<T> {
         private int wizPos;
