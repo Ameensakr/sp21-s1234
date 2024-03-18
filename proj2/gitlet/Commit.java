@@ -14,27 +14,14 @@ import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-// TODO: any imports you need here
 
 import static gitlet.Utils.*;
 import static java.lang.String.copyValueOf;
 
 
-/** Represents a gitlet commit object.
- *  TODO: It's a good idea to give a description here of what else this Class
- *  does at a high level.
- *
- *  @author TODO
- */
-public class Commit implements Serializable{
-    /**
-     * TODO: add instance variables here.
-     * List all instance variables of the Commit class here with a useful
-     * comment above them describing what that variable represents and how that
-     * variable is used. We've provided one example for `message`.
-     */
 
-    /** The message of this Commit. */
+public class Commit implements Serializable{
+
     public static String HEAD;
     private String message;
     public HashMap<String,String> blobs;
@@ -66,7 +53,6 @@ public class Commit implements Serializable{
     }
     public String get_parent()
     {
-        parent = readObject(join(Repository.commit , get_head()) , Commit.class).parent;
         return parent;
     }
     public static String get_head()
@@ -87,10 +73,8 @@ public class Commit implements Serializable{
             SimpleDateFormat sdf = new SimpleDateFormat("E MMM dd HH:mm:ss yyyy Z");
             date = sdf.format(new Date());
             HEAD = (readContentsAsString(join(Repository.GITLET_DIR,"HEAD")));
-            parent = copyValueOf(HEAD.toCharArray());
-            File comm=join(Repository.commit,parent);
-            Commit temp = readObject(comm,Commit.class);
-            blobs.putAll(temp.blobs);
+            File comm=join(Repository.commit,HEAD);
+            blobs.putAll(readObject(comm, Commit.class).blobs);
             File directory_add = new File(String.valueOf((Repository.addition)));
             File[] add_blobs=directory_add.listFiles();
             assert add_blobs != null;
@@ -110,14 +94,14 @@ public class Commit implements Serializable{
                 blobs.remove(it.getName().substring(0,40),it.getName().substring(40));
                 it.delete();
             }
-
-//            for (Map.Entry<String, String> entry : blobs.entrySet()) {
-//                System.out.println(entry.getKey() + ": " + entry.getValue());
-//            }
         }
-        this.message = copyValueOf(message.toCharArray());
-        this.sh1 = copyValueOf(sha1(blobs.toString()).toCharArray());
-        HEAD = copyValueOf(sh1.toCharArray());
+        this.message = (message.substring(0));
+        this.sh1 = (sha1(blobs.toString()).substring(0));
+        if(!is_init) {
+            parent = new String(HEAD);
+        }
+        HEAD = (sh1.substring(0));
+//        System.out.println(HEAD +" " +parent);
         save();
 
     }

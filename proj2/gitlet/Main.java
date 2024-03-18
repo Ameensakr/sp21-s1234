@@ -38,13 +38,22 @@ public class Main {
                 break;
             case "global-log":
                 Repository.global_log();
+                break;
             case "find":
                 Repository.find(args[1]);
+                break;
             case "checkout":
-                Repository.checkout(args[1]);
+                switch (args.length) {
+                    case 3:
+                        Repository.checkout(args[2]);
+                        break;
+                    case 4:
+                        Repository.checkout(args[3],args[1]);
+                        break;
+                    case 2:
+                        break;
+                }
 
-
-            // TODO: FILL THE REST IN
         }
     }
 }

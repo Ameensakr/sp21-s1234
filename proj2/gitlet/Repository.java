@@ -12,31 +12,14 @@ import java.util.*;
 import static gitlet.Utils.*;
 import static java.lang.String.copyValueOf;
 
-// TODO: any imports you need here
 
-/** Represents a gitlet repository.
- *  TODO: It's a good idea to give a description here of what else this Class
- *  does at a high level.
- *
- *  @author TODO
- */
 public class Repository {
-    /**
-     * TODO: add instance variables here.
-     *
-     *
-     * List all instance variables of the Repository class here with a useful
-     * comment above them describing what that variable represents and how that
-     * variable is used. We've provided two examples for you.
-     */
 
-
-    /** The current working directory. */
     public static final File CWD = new File(System.getProperty("user.dir"));
     /** The .gitlet directory. */
     public static final File GITLET_DIR = join("/home/amigoo/sp21-s1234/proj2", ".gitlet");
 
-    /* TODO: fill in the rest of this class. */
+
     public static File stage = join(GITLET_DIR,"staging area");
     public static File blobs = join(GITLET_DIR,"blobs");
     public static File commit = join(GITLET_DIR,"commits");
@@ -118,7 +101,10 @@ public class Repository {
     {
         String cur = copyValueOf(Commit.get_head().toCharArray());
         Commit cur_com = readObject(join(commit,cur),Commit.class);
-        while (true) {
+        int u = 3;
+
+        while (u > 0) {
+            u--;
             System.out.println("===");
             System.out.println("commit " + cur);
             System.out.println("Date " + cur_com.get_date());
@@ -126,8 +112,9 @@ public class Repository {
             System.out.println();
             if(cur_com.get_is_init())
                 break;
-            cur = copyValueOf(cur_com.get_parent().toCharArray());
+            cur = cur_com.get_parent().substring(0);
             cur_com = readObject(join(commit,cur),Commit.class);
+
         }
     }
 
@@ -169,6 +156,12 @@ public class Repository {
     }
     public static void checkout(String name) throws IOException {
         String cur_head=Commit.get_head();
+        checkout(name , cur_head);
+
+    }
+    public static void checkout(String name , String cur_head) throws IOException  {
+//        System.out.println(name + " " + cur_head);
+//        System.exit(0);
         File f=join(commit,cur_head);
         Commit cur=readObject(f,Commit.class);
         HashMap<String,String>check=cur.blobs;
@@ -183,11 +176,10 @@ public class Repository {
                 FileChannel src = new FileInputStream(cp).getChannel();
                 FileChannel dest = new FileOutputStream(w).getChannel();
                 dest.transferFrom(src, 0, src.size());
-//                writeContents(w,cp);
 
             }
         }
-
-
     }
+
+
 }
