@@ -99,10 +99,19 @@ public class Repository {
             sha1 = Utils.sha1(arr);
             File add = join(addition, sha1 + name);
             File rem = join(removal, sha1 + name);
-            if (!add.exists()) {
-                writeContents(add, arr);
-                add.createNewFile();
+
+            for(File it : addition.listFiles())
+            {
+                if(it.getName().substring(40).equals(name))
+                {
+                    it.delete();
+                    break;
+                }
             }
+            writeContents(add, arr);
+            add.createNewFile();
+
+
             if (rem.exists()) {
                 rem.delete();
             }
@@ -206,13 +215,10 @@ public class Repository {
 //        System.out.println(name + " " + cur_head);
 //        System.exit(0);
         try {
-
-
             File f = join(commit, cur_head);
             Commit cur = readObject(f, Commit.class);
             HashMap<String, String> check = cur.blobs;
             for (Map.Entry<String, String> check1 : check.entrySet()) {
-                //System.out.println(check1.getKey() + ": " + check1.getValue());
                 if (check1.getValue().equals(name)) {
                     join(CWD, name).delete();
                     File w = join(CWD, check1.getValue());

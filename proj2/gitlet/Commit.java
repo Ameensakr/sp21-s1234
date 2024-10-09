@@ -96,10 +96,21 @@ public class Commit implements Serializable {
                 date = ff.toString();
                 HEAD = (readContentsAsString(join(Repository.GITLET_DIR, "HEAD")));
                 File comm = join(Repository.commit, HEAD);
-                blobs.putAll(readObject(comm, Commit.class).blobs);
+
                 File directory_add = new File(String.valueOf((Repository.addition)));
                 File[] add_blobs = directory_add.listFiles();
                 assert add_blobs != null;
+                A: for (Map.Entry<String, String> temp: readObject(comm, Commit.class).blobs.entrySet()) {
+                    for(File it : add_blobs) {
+                        if (it.getName().substring(40).equals(temp.getValue())) {
+                            continue A;
+                        }
+                    }
+                    blobs.put(temp.getKey(), temp.getValue());
+                }
+
+
+
                 for (File it : add_blobs) {
                     blobs.put(it.getName().substring(0, 40), it.getName().substring(40));
                     File f = new File(Repository.blobs, it.getName());
@@ -111,6 +122,7 @@ public class Commit implements Serializable {
                 }
                 File directory_rem = new File(String.valueOf((Repository.removal)));
                 File[] rem_blobs = directory_rem.listFiles();
+
                 assert rem_blobs != null;
                 for (File it : rem_blobs) {
                     blobs.remove(it.getName().substring(0, 40), it.getName().substring(40));
@@ -131,7 +143,6 @@ public class Commit implements Serializable {
                 parent = new String(HEAD);
             }
             HEAD = (sh1.substring(0));
-//        System.out.println(HEAD +" " +parent);
         }
         catch (IOException e) {
             System.err.println("An error occurred: " + e.getMessage());
