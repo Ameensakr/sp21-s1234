@@ -41,7 +41,7 @@ public class Commit implements Serializable {
      */
     public static String HEAD = (readContentsAsString(join(Repository.GITLET_DIR, "HEAD")));
     private String message;
-    public HashMap<String,String> blobs;
+    public HashMap<String,String> blobs; // sha1 of the file and the name of the file
     private String date;
     private String parent = null;
     private String sh1;
