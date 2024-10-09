@@ -36,6 +36,10 @@ public class Repository {
     public static File addition = join(stage,"addition");
     public static File removal = join(stage,"removal");
     public static File HEAD = join(GITLET_DIR,"HEAD");
+    public static File branches_file = join(GITLET_DIR,"branches");
+    public static HashMap<String, String> branches = new HashMap<>();
+    public static String cur_branch = "master";
+    public static File current_branch = join(GITLET_DIR,"current_branch");
     public static boolean  check_exist(String cwd,String last_com,String check)
     {
         File loc=join(cwd,last_com);
@@ -65,6 +69,9 @@ public class Repository {
             removal.mkdir();
             HEAD.createNewFile();
             blobs.mkdir();
+            branches_file.createNewFile();
+            current_branch.createNewFile();
+
             new Commit("initial commit", true);
         }catch (IOException e) {
             System.err.println("An error occurred: " + e.getMessage());
@@ -219,5 +226,49 @@ public class Repository {
             e.printStackTrace();
         }
     }
+
+    public static void branch(String name)
+    {
+        if(branches.containsKey(name))
+        {
+            System.out.println("A branch with that name already exists.");
+            System.exit(0);
+        }
+        branches.put(name,Commit.get_head());
+        Commit.save_branch();
+    }
+
+    public static void checkout_branch(String name)
+    {
+        if(!branches.containsKey(name))
+        {
+            System.exit(0);
+        }
+        if(name.equals(cur_branch))
+        {
+            System.exit(0);
+        }
+        cur_branch = name;
+        Commit.HEAD = (String) branches.get(name);
+        writeObject(HEAD,Commit.HEAD);
+        Commit.save_branch();
+    }
+
+    public static void rm_branch(String name)
+    {
+        if(!branches.containsKey(name))
+        {
+            System.out.println("A branch with that name does not exist.");
+            System.exit(0);
+        }
+        if(name.equals(cur_branch))
+        {
+            System.out.println("Cannot remove the current branch.");
+            System.exit(0);
+        }
+        branches.remove(name);
+        Commit.save_branch();
+    }
+
 
 }

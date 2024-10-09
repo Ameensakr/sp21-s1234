@@ -54,8 +54,15 @@ public class Main {
                         Repository.checkout(args[3], args[1]);
                         break;
                     case 2:
+                        Repository.checkout_branch(args[1]);
                         break;
                 }
+            case "branch":
+                Repository.branch(args[1]);
+                break;
+            case "rm-branch":
+                Repository.rm_branch(args[1]);
+                break;
         }
 
 

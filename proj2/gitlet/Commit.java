@@ -34,6 +34,16 @@ public class Commit implements Serializable {
         writeContents(Repository.HEAD, sh1);
     }
 
+    static void save_branch()
+    {
+        File branch = join(Repository.GITLET_DIR , "branches_file");
+        writeObject(branch , Repository.branches);
+
+        File branch2 = join(Repository.GITLET_DIR , "current_branch");
+        writeObject(branch2 , Repository.cur_branch);
+
+    }
+
     public boolean get_is_init() {
         return is_init;
     }
@@ -58,6 +68,14 @@ public class Commit implements Serializable {
         return HEAD;
     }
 
+    @SuppressWarnings("unchecked")
+    public void readMap()
+    {
+        File branch = join(Repository.GITLET_DIR , "branches");
+        Repository.branches = (HashMap<String, String>) readObject(branch, HashMap.class);
+        File branch2 = join(Repository.GITLET_DIR , "current_branch");
+        Repository.cur_branch = readObject(branch2 , String.class);
+    }
 
     public Commit(String message , boolean is_init)  {
 
@@ -124,7 +142,27 @@ public class Commit implements Serializable {
             if(!is_init) {
                 parent = new String(HEAD);
             }
+
+
+
             HEAD = (sh1.substring(0));
+            if(!is_init)
+            {
+                readMap();
+            }
+
+
+
+            if(is_init)
+            {
+                Repository.branches.put("master", sh1);
+                Repository.cur_branch = "master";
+            }
+            else {
+                Repository.branches.put(Repository.cur_branch , HEAD);
+            }
+            save_branch();
+
         }
         catch (IOException e) {
             System.err.println("An error occurred: " + e.getMessage());
