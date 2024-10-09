@@ -147,7 +147,7 @@ public class Repository {
         while (true) {
             System.out.println("===");
             System.out.println("commit " + cur);
-            System.out.println("Date " + cur_com.get_date());
+            System.out.println("Date: " + cur_com.get_date());
             System.out.println(cur_com.get_commit_message());
             System.out.println();
             if(cur_com.get_parent().isEmpty())
