@@ -12,29 +12,15 @@ import java.util.*;
 
 import static gitlet.Utils.*;
 import static java.lang.String.copyValueOf;
+import static java.lang.Thread.sleep;
 import static java.sql.Types.NULL;
 
 
-// TODO: any imports you need here
-
-/** Represents a gitlet repository.
- *  TODO: It's a good idea to give a description here of what else this Class
- *  does at a high level.
- *
- *  @author TODO
- */
 
 public class Repository {
 
 
-    /**
-     * TODO: add instance variables here.
-     *
-     *
-     * List all instance variables of the Repository class here with a useful
-     * comment above them describing what that variable represents and how that
-     * variable is used. We've provided two examples for you.
-     */
+
 
 
     /** The current working directory. */
@@ -42,7 +28,6 @@ public class Repository {
     /** The .gitlet directory. */
     public static final File GITLET_DIR = join(System.getProperty("user.dir"), ".gitlet");
 
-    /* TODO: fill in the rest of this class. */
     public static File stage = join(GITLET_DIR,"staging area");
 
     public static File blobs = join(GITLET_DIR,"blobs");
@@ -88,9 +73,10 @@ public class Repository {
     }
 
 
-    public static void add(String name)  {
-        try {
+    public static void add(String name) {
 
+        try {
+            sleep(100);
 
             String sha1;
 
@@ -119,17 +105,17 @@ public class Repository {
         catch (IOException e) {
             System.err.println("An error occurred: " + e.getMessage());
             e.printStackTrace();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
     }
     public static void rm(String name)
     {
         try {
 
-            //System.out.println(name);
             String sha1;
             byte[] arr = readContents(Utils.join(CWD, name));
             sha1 = Utils.sha1(arr);
-            //System.out.println(sha1);
             File add = join(addition, sha1 + name);
             File rem = join(removal, sha1 + name);
 //        writeContents(add,arr);

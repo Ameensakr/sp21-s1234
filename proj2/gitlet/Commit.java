@@ -16,29 +16,10 @@ import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-// TODO: any imports you need here
-
 import static gitlet.Utils.*;
 
-
-/**
- * Represents a gitlet commit object.
- *  TODO: It's a good idea to give a description here of what else this Class
- *  does at a high level.
- *
- * @author TODO
- */
 public class Commit implements Serializable {
-    /**
-     * TODO: add instance variables here.
-     * List all instance variables of the Commit class here with a useful
-     * comment above them describing what that variable represents and how that
-     * variable is used. We've provided one example for `message`.
-     */
 
-    /**
-     * The message of this Commit.
-     */
     public static String HEAD = (readContentsAsString(join(Repository.GITLET_DIR, "HEAD")));
     private String message;
     public HashMap<String,String> blobs; // sha1 of the file and the name of the file
@@ -79,6 +60,7 @@ public class Commit implements Serializable {
 
 
     public Commit(String message , boolean is_init)  {
+
         // hard code the initial time
         this.is_init = is_init;
         blobs=new HashMap<>();
