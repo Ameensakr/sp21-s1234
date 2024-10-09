@@ -121,11 +121,11 @@ public class Commit implements Serializable {
 
 
             this.message = (message.substring(0));
-            if(HEAD.equals(sha1(this.toString()).substring(0)))
+            if(HEAD.equals(sha1(this.toString() + date).substring(0)))
             {
                 return;
             }
-            this.sh1 = (sha1(this.toString()).substring(0));
+            this.sh1 = (sha1(this.toString() + date).substring(0));
 
             if(!is_init) {
                 parent = new String(HEAD);
