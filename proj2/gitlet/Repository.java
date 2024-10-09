@@ -140,7 +140,7 @@ public class Repository {
                 writeContents(rem, arr);
                 rem.createNewFile();
                 temp.delete();
-            } else System.out.println("No reason to remove the file.");
+            }
         }
         catch (IOException e) {
             System.err.println("An error occurred: " + e.getMessage());
@@ -212,8 +212,7 @@ public class Repository {
 
     }
     public static void checkout(String name , String cur_head) {
-//        System.out.println(name + " " + cur_head);
-//        System.exit(0);
+
         try {
             File f = join(commit, cur_head);
             Commit cur = readObject(f, Commit.class);
