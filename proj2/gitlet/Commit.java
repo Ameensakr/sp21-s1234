@@ -72,7 +72,8 @@ public class Commit implements Serializable {
         HEAD = (readContentsAsString(join(Repository.GITLET_DIR, "HEAD")));
         return HEAD;
     }
-
+    
+    @SuppressWarnings("unchecked")
     public static void readMap() {
 
         File branch = join(Repository.GITLET_DIR, "branches_file");
