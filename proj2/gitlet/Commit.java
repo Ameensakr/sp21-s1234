@@ -164,7 +164,9 @@ public class Commit implements Serializable {
                 readMap();
                 Repository.branches.put(Repository.cur_branch, HEAD);
             }
+
             save_branch();
+
 
         } catch (IOException e) {
             System.err.println("An error occurred: " + e.getMessage());
@@ -173,6 +175,13 @@ public class Commit implements Serializable {
             throw new RuntimeException(e);
         }
         save();
+        try {
+            sleep(100);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+
 
     }
 
