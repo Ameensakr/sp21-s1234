@@ -94,7 +94,7 @@ public class Commit implements Serializable {
         }
         blobs = new HashMap<>();
         try {
-            sleep(100);
+            sleep(1000);
             if (is_init) {
                 date = "Thu Jan 01 02:00:00 1970 +0200";
             } else {
@@ -176,7 +176,7 @@ public class Commit implements Serializable {
         }
         save();
         try {
-            sleep(100);
+            sleep(1000);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }

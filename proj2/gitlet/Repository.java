@@ -80,7 +80,7 @@ public class Repository {
     public static void add(String name) {
 
         try {
-            sleep(100);
+            sleep(1000);
 
             if(!join(CWD, name).exists())
             {
@@ -165,7 +165,7 @@ public class Repository {
 
     public static void log() {
         try{
-        sleep(100);
+        sleep(1000);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
