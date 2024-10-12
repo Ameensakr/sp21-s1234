@@ -72,7 +72,7 @@ public class Commit implements Serializable {
         HEAD = (readContentsAsString(join(Repository.GITLET_DIR, "HEAD")));
         return HEAD;
     }
-    
+
     @SuppressWarnings("unchecked")
     public static void readMap() {
 
@@ -86,6 +86,11 @@ public class Commit implements Serializable {
 
         // hard code the initial time
         this.is_init = is_init;
+        if(!is_init && message.length() == 0)
+        {
+            System.out.println("Please enter a commit message.");
+            System.exit(0);
+        }
         blobs = new HashMap<>();
         try {
 
@@ -125,6 +130,10 @@ public class Commit implements Serializable {
                 }
                 File directory_rem = new File(String.valueOf((Repository.removal)));
                 File[] rem_blobs = directory_rem.listFiles();
+                if(rem_blobs.length == 0 && add_blobs.length == 0){
+                    System.out.println("No changes added to the commit.");
+                    System.exit(0);
+                }
 
                 assert rem_blobs != null;
                 for (File it : rem_blobs) {

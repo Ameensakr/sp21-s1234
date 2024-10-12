@@ -82,11 +82,24 @@ public class Repository {
         try {
             sleep(100);
 
+            if(!join(CWD, name).exists())
+            {
+                System.out.println("File does not exist.");
+                System.exit(0);
+            }
+
             String sha1;
 
             byte[] arr = readContents(join(CWD, name));
 
             sha1 = sha1(arr);
+
+            HashMap <String , String> blobs = readObject(join(commit, Commit.get_head()), Commit.class).blobs;
+            if(blobs.containsKey(sha1))
+            {
+                return;
+            }
+
             File add = join(addition, sha1 + name);
             File rem = join(removal, sha1 + name);
 
@@ -117,16 +130,23 @@ public class Repository {
             String sha1;
             byte[] arr = readContents(join(CWD, name));
             sha1 = sha1(arr);
+
             File add = join(addition, sha1 + name);
             File rem = join(removal, sha1 + name);
 //        writeContents(add,arr);
+
+            HashMap<String , String>blobs = readObject(join(commit, Commit.get_head()), Commit.class).blobs;
             if (add.exists()) {
                 add.delete();
-            } else if (check_exist(String.valueOf(join(GITLET_DIR, "commits")), Commit.HEAD, sha1 + name)) {
+            } else if (blobs.containsValue(name)) {
                 File temp = join(CWD, name);
                 writeContents(rem, arr);
                 rem.createNewFile();
                 temp.delete();
+            }
+            else {
+                System.out.println("No reason to remove the file.");
+                System.exit(0);
             }
         } catch (IOException e) {
             System.err.println("An error occurred: " + e.getMessage());
@@ -243,25 +263,36 @@ public class Repository {
 
     public static void rm_branch(String name) {
         if (!branches.containsKey(name)) {
-            System.out.println("A branch with that name does not exist.");
+            System.out.println("No such branch exists.");
             System.exit(0);
         }
         if (name.equals(cur_branch)) {
             System.out.println("Cannot remove the current branch.");
             System.exit(0);
         }
-        List<Pair> temp = new ArrayList<>();
+        Pair temp = new Pair("temp" , "temp");
+        String splet = new String("");
         for (Map.Entry<Pair, String> it : Commit.split_point.entrySet()) {
             if (it.getKey().getSecond().equals(name)) {
-                temp.add(it.getKey());
+                temp = new Pair(it.getKey().getFirst(), it.getKey().getSecond());
+                splet = it.getValue();
             } else if (it.getKey().getFirst().equals(name)) {
-                temp.add(it.getKey());
+                temp = new Pair(it.getKey().getFirst(), it.getKey().getSecond());
+                splet = it.getValue();
             }
         }
+//        String cur = branches.get(name);
+//        while(cur != splet) {
+//            Commit temp_com = readObject(join(commit, cur), Commit.class);
+//            for (Map.Entry<String, String> it : temp_com.blobs.entrySet()) {
+//                File f = join(blobs, it.getKey() + it.getValue());
+//                f.delete();
+//            }
+//            cur = temp_com.parent;
+//        }
 
-        for (Pair it : temp) {
-            Commit.split_point.remove(it);
-        }
+        Commit.split_point.remove(temp);
+
 
         branches.remove(name);
         Commit.save_branch();

@@ -50,11 +50,20 @@ public class Main {
             case "checkout":
                 switch (args.length) {
                     case 3:
+                        if(!args[1].equals("--")) {
+                            System.out.println("Incorrect operands.");
+                            System.exit(0);
+                        }
                         Repository.checkout(args[2]);
                         break;
-                    case 4:
+                    case 4: {
+                        if(!args[2].equals("--")) {
+                            System.out.println("Incorrect operands.");
+                            System.exit(0);
+                        }
                         Repository.checkout(args[3], args[1]);
                         break;
+                    }
                     case 2:
                         Repository.checkout_branch(args[1]);
                         break;
