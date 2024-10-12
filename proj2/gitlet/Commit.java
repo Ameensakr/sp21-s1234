@@ -17,6 +17,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 import static gitlet.Utils.*;
+import static java.lang.Thread.sleep;
 
 public class Commit implements Serializable {
 
@@ -93,8 +94,7 @@ public class Commit implements Serializable {
         }
         blobs = new HashMap<>();
         try {
-
-
+            sleep(100);
             if (is_init) {
                 date = "Thu Jan 01 02:00:00 1970 +0200";
             } else {
@@ -169,6 +169,8 @@ public class Commit implements Serializable {
         } catch (IOException e) {
             System.err.println("An error occurred: " + e.getMessage());
             e.printStackTrace();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
         save();
 

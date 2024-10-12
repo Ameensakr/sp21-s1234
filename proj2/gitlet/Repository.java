@@ -94,6 +94,19 @@ public class Repository {
 
             sha1 = sha1(arr);
 
+            for (File it : addition.listFiles()) {
+                if (it.getName().substring(40).equals(name)) {
+                    it.delete();
+                    break;
+                }
+            }
+            for (File it : removal.listFiles()) {
+                if (it.getName().substring(40).equals(name)) {
+                    it.delete();
+                    break;
+                }
+            }
+
             HashMap <String , String> blobs = readObject(join(commit, Commit.get_head()), Commit.class).blobs;
             if(blobs.containsKey(sha1))
             {
@@ -103,12 +116,8 @@ public class Repository {
             File add = join(addition, sha1 + name);
             File rem = join(removal, sha1 + name);
 
-            for (File it : addition.listFiles()) {
-                if (it.getName().substring(40).equals(name)) {
-                    it.delete();
-                    break;
-                }
-            }
+
+
             writeContents(add, arr);
             add.createNewFile();
 
@@ -155,6 +164,11 @@ public class Repository {
     }
 
     public static void log() {
+        try{
+        sleep(100);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
         String cur = copyValueOf(Commit.get_head().toCharArray());
         Commit cur_com = readObject(join(commit, cur), Commit.class);
 //
