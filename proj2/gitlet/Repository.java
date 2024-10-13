@@ -293,9 +293,7 @@ public class Repository {
                 System.exit(0);
             }
 
-            cur_branch = name;
-            Commit.HEAD = (String) branches.get(name);
-            writeContents(join(GITLET_DIR, "HEAD"), Commit.HEAD);
+
             List<String> files = plainFilenamesIn(CWD);
             HashMap<String, String> blobs = readObject(join(commit, Commit.get_head()), Commit.class).blobs;
             for (String it : files) {
@@ -307,7 +305,9 @@ public class Repository {
                 }
             }
 
-
+            cur_branch = name;
+            Commit.HEAD = (String) branches.get(name);
+            writeContents(join(GITLET_DIR, "HEAD"), Commit.HEAD);
 
             List<String> st = plainFilenamesIn(CWD);
             for (String it : st) {
