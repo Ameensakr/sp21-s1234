@@ -282,18 +282,43 @@ public class Repository {
     }
 
     public static void checkout_branch(String name) {
-        Commit.readMap();
-        if (!branches.containsKey(name)) {
-            System.exit(0);
-        }
-        if (name.equals(cur_branch)) {
-            System.exit(0);
-        }
+        try {
+            Commit.readMap();
+            if (!branches.containsKey(name)) {
+                System.out.println("No such branch exists.");
+                System.exit(0);
+            }
+            if (name.equals(cur_branch)) {
+                System.out.println("No need to checkout the current branch.");
+                System.exit(0);
+            }
 
-        cur_branch = name;
-        Commit.HEAD = (String) branches.get(name);
-        writeContents(join(GITLET_DIR, "HEAD"), Commit.HEAD);
-        Commit.save_branch();
+            cur_branch = name;
+            Commit.HEAD = (String) branches.get(name);
+            writeContents(join(GITLET_DIR, "HEAD"), Commit.HEAD);
+            List<String> st = plainFilenamesIn(CWD);
+            for (String it : st) {
+                File x = join(CWD, it);
+                x.delete();
+            }
+
+            HashMap<String, String> blobs = readObject(join(commit, Commit.get_head()), Commit.class).blobs;
+            for (Map.Entry<String, String> it : blobs.entrySet()) {
+                File w = join(CWD, it.getValue());
+                File cp = join(String.valueOf(blobs), it.getKey() + it.getValue());
+                w.createNewFile();
+                FileChannel src = new FileInputStream(cp).getChannel();
+                FileChannel dest = new FileOutputStream(w).getChannel();
+                dest.transferFrom(src, 0, src.size());
+            }
+
+
+            Commit.save_branch();
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static void rm_branch(String name) {
