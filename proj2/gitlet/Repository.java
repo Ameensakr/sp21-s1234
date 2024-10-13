@@ -92,7 +92,7 @@ public class Repository {
 
             byte[] arr = readContents(join(CWD, name));
 
-            sha1 = sha1(arr);
+            sha1 = sha1(arr + name);
 
             for (File it : addition.listFiles()) {
                 if (it.getName().substring(40).equals(name)) {
@@ -135,10 +135,9 @@ public class Repository {
 
     public static void rm(String name) {
         try {
-
             String sha1;
             byte[] arr = readContents(join(CWD, name));
-            sha1 = sha1(arr);
+            sha1 = sha1(arr + name);
 
             File add = join(addition, sha1 + name);
             File rem = join(removal, sha1 + name);
