@@ -300,7 +300,7 @@ public class Repository {
                 if (it.equals(".gitlet"))
                     continue;
                 if (!blobs.containsValue(it)) {
-                    System.out.println("There is an untracked file in the way; delete it or add it first.");
+                    System.out.println("There is an untracked file in the way; delete it, or add and commit it first.");
                     System.exit(0);
                 }
             }
