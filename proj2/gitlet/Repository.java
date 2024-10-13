@@ -305,14 +305,12 @@ public class Repository {
             HashMap<String, String> blobs = readObject(join(commit, Commit.get_head()), Commit.class).blobs;
             for (Map.Entry<String, String> it : blobs.entrySet()) {
                 File w = join(CWD, it.getValue());
-                File cp = join(String.valueOf(blobs), it.getKey() + it.getValue());
+                File cp = join(Repository.blobs, it.getKey() + it.getValue());
                 w.createNewFile();
                 FileChannel src = new FileInputStream(cp).getChannel();
                 FileChannel dest = new FileOutputStream(w).getChannel();
                 dest.transferFrom(src, 0, src.size());
             }
-
-
             Commit.save_branch();
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
@@ -324,7 +322,7 @@ public class Repository {
     public static void rm_branch(String name) {
         Commit.readMap();
         if (!branches.containsKey(name)) {
-            System.out.println("No such branch exists.");
+            System.out.println("A branch with that name does not exist.");
             System.exit(0);
         }
         if (name.equals(cur_branch)) {
