@@ -296,13 +296,26 @@ public class Repository {
             cur_branch = name;
             Commit.HEAD = (String) branches.get(name);
             writeContents(join(GITLET_DIR, "HEAD"), Commit.HEAD);
+            List<String> files = plainFilenamesIn(CWD);
+            HashMap<String, String> blobs = readObject(join(commit, Commit.get_head()), Commit.class).blobs;
+            for (String it : files) {
+                if (it.equals(".gitlet"))
+                    continue;
+                if (!blobs.containsValue(it)) {
+                    System.out.println("There is an untracked file in the way; delete it or add it first.");
+                    System.exit(0);
+                }
+            }
+
+
+
             List<String> st = plainFilenamesIn(CWD);
             for (String it : st) {
                 File x = join(CWD, it);
                 x.delete();
             }
 
-            HashMap<String, String> blobs = readObject(join(commit, Commit.get_head()), Commit.class).blobs;
+            blobs = readObject(join(commit, Commit.get_head()), Commit.class).blobs;
             for (Map.Entry<String, String> it : blobs.entrySet()) {
                 File w = join(CWD, it.getValue());
                 File cp = join(Repository.blobs, it.getKey() + it.getValue());
