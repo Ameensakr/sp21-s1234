@@ -232,11 +232,22 @@ public class Repository {
     public static void checkout(String name, String cur_head) {
 
         try {
+            // i want to check if there is a commit with the given id
             File f = join(commit, cur_head);
+            if(!f.exists())
+            {
+                System.out.println("No commit with that id exists.");
+                System.exit(0);
+            }
+            // i want to check if there is a file with that name in the commit
+
+
             Commit cur = readObject(f, Commit.class);
             HashMap<String, String> check = cur.blobs;
+            boolean ch = false;
             for (Map.Entry<String, String> check1 : check.entrySet()) {
                 if (check1.getValue().equals(name)) {
+                    ch = true;
                     join(CWD, name).delete();
                     File w = join(CWD, check1.getValue());
                     File cp = join(blobs, check1.getKey() + check1.getValue());
@@ -246,6 +257,11 @@ public class Repository {
                     dest.transferFrom(src, 0, src.size());
                 }
             }
+            if(!ch)
+            {
+                System.out.println("File does not exist in that commit.");
+                System.exit(0);
+            }
         } catch (IOException e) {
             System.err.println("An error occurred: " + e.getMessage());
             e.printStackTrace();
@@ -253,6 +269,7 @@ public class Repository {
     }
 
     public static void branch(String name) {
+        Commit.readMap();
         if (branches.containsKey(name)) {
             System.out.println("A branch with that name already exists.");
             System.exit(0);
@@ -265,19 +282,22 @@ public class Repository {
     }
 
     public static void checkout_branch(String name) {
+        Commit.readMap();
         if (!branches.containsKey(name)) {
             System.exit(0);
         }
         if (name.equals(cur_branch)) {
             System.exit(0);
         }
+
         cur_branch = name;
         Commit.HEAD = (String) branches.get(name);
-        writeObject(HEAD, Commit.HEAD);
+        writeContents(join(GITLET_DIR, "HEAD"), Commit.HEAD);
         Commit.save_branch();
     }
 
     public static void rm_branch(String name) {
+        Commit.readMap();
         if (!branches.containsKey(name)) {
             System.out.println("No such branch exists.");
             System.exit(0);
