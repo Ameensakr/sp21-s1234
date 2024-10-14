@@ -1,6 +1,8 @@
 package gitlet;
 
-public class Pair {
+import java.io.Serializable;
+
+public class Pair implements Serializable {
     public String first;
     public String second;
 

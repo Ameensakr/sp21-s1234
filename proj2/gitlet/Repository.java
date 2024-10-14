@@ -37,6 +37,7 @@ public class Repository {
     public static File removal = join(stage, "removal");
     public static File HEAD = join(GITLET_DIR, "HEAD");
     public static File branches_file = join(GITLET_DIR, "branches");
+    public static File split_point_file = join(GITLET_DIR, "split_point");
     public static HashMap<String, String> branches = new HashMap<>();
     public static String cur_branch = new String("master");
     public static File current_branch = join(GITLET_DIR, "current_branch");
@@ -68,6 +69,7 @@ public class Repository {
             blobs.mkdir();
             branches_file.createNewFile();
             current_branch.createNewFile();
+            split_point_file.createNewFile();
 
             new Commit("initial commit", true);
         } catch (IOException e) {
@@ -82,8 +84,7 @@ public class Repository {
         try {
             sleep(500);
 
-            if(!join(CWD, name).exists())
-            {
+            if (!join(CWD, name).exists()) {
                 System.out.println("File does not exist.");
                 System.exit(0);
             }
@@ -109,15 +110,13 @@ public class Repository {
                 }
             }
 
-            HashMap <String , String> blobs = readObject(join(commit, Commit.get_head()), Commit.class).blobs;
-            if(blobs.containsKey(sha1))
-            {
+            HashMap<String, String> blobs = readObject(join(commit, Commit.get_head()), Commit.class).blobs;
+            if (blobs.containsKey(sha1)) {
                 return;
             }
 
             File add = join(addition, sha1 + name);
             File rem = join(removal, sha1 + name);
-
 
 
             writeContents(add, arr);
@@ -146,7 +145,7 @@ public class Repository {
             File rem = join(removal, sha1 + name);
 //        writeContents(add,arr);
 
-            HashMap<String , String>blobs = readObject(join(commit, Commit.get_head()), Commit.class).blobs;
+            HashMap<String, String> blobs = readObject(join(commit, Commit.get_head()), Commit.class).blobs;
             if (add.exists()) {
                 add.delete();
             } else if (blobs.containsValue(name)) {
@@ -154,8 +153,7 @@ public class Repository {
                 writeContents(rem, arr);
                 rem.createNewFile();
                 temp.delete();
-            }
-            else {
+            } else {
                 System.out.println("No reason to remove the file.");
                 System.exit(0);
             }
@@ -166,8 +164,8 @@ public class Repository {
     }
 
     public static void log() {
-        try{
-        sleep(500);
+        try {
+            sleep(500);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -234,8 +232,7 @@ public class Repository {
         try {
             // i want to check if there is a commit with the given id
             File f = join(commit, cur_head);
-            if(!f.exists())
-            {
+            if (!f.exists()) {
                 System.out.println("No commit with that id exists.");
                 System.exit(0);
             }
@@ -257,8 +254,8 @@ public class Repository {
                     dest.transferFrom(src, 0, src.size());
                 }
             }
-            if(!ch)
-            {
+            if (!ch) {
+
                 System.out.println("File does not exist in that commit.");
                 System.exit(0);
             }
@@ -299,6 +296,7 @@ public class Repository {
             for (String it : files) {
                 if (it.equals(".gitlet"))
                     continue;
+                if (it.equals("script.sh")) continue;
                 if (!blobs.containsValue(it)) {
                     System.out.println("There is an untracked file in the way; delete it, or add and commit it first.");
                     System.exit(0);
@@ -312,6 +310,7 @@ public class Repository {
             List<String> st = plainFilenamesIn(CWD);
             for (String it : st) {
                 File x = join(CWD, it);
+                if (it.equals("script.sh")) continue;
                 x.delete();
             }
 
@@ -342,7 +341,7 @@ public class Repository {
             System.out.println("Cannot remove the current branch.");
             System.exit(0);
         }
-        Pair temp = new Pair("temp" , "temp");
+        Pair temp = new Pair("temp", "temp");
         String splet = new String("");
         for (Map.Entry<Pair, String> it : Commit.split_point.entrySet()) {
             if (it.getKey().getSecond().equals(name)) {
@@ -371,75 +370,104 @@ public class Repository {
     }
 
     public static void reset(String sh1) {
-        try {
-            File f = join(commit, sh1);
-            if (!f.exists()) {
-                System.out.println("No commit with that id exists.");
+        File f = join(commit, sh1);
+        if (!f.exists()) {
+            System.out.println("No commit with that id exists.");
+            System.exit(0);
+        }
+
+
+        Commit target = readObject(f, Commit.class);
+
+        Commit cur_head = readObject(join(commit, Commit.get_head()), Commit.class);
+//            for (Map.Entry<String,String> it : cur_head.blobs.entrySet()) {
+//                File x=new File(CWD,it.getValue());
+//                x.delete();
+////
+//            }
+
+
+        // I want to check if the there is untracked files in the working directory in the current commit
+
+        List<String> files = plainFilenamesIn(CWD);
+        for (String it : files) {
+            if (it.equals(".gitlet"))
+                continue;
+//                if (it.equals(".gitlet"))
+//                    continue;
+            if (cur_head.blobs.containsValue(it)) {
+                if(target.blobs.containsValue(it)) {
+                    byte[] arr = readContents(join(CWD, it));
+
+                    String sha1 = sha1(arr);
+                    sha1 = sha1(sha1 + it);
+                    if(cur_head.blobs.containsKey(sha1)&&cur_head.blobs.get(sha1).equals(it))
+                    {
+                        checkout(it,sh1);
+                    }
+                    else {
+                        System.out.println("There is an untracked file in the way; delete it or add it first.");
+                        System.exit(0);
+                    }
+
+
+                }
+
+                //
+                else
+                {
+
+                    File to_del=new File(CWD,it);
+                    to_del.delete();
+                }
+
+            }
+            else if(target.blobs.containsValue(it))
+            {
+
+                System.out.println("There is an untracked file in the way; delete it or add it first.");
                 System.exit(0);
             }
-
-
-            Commit target = readObject(f, Commit.class);
-
-            Commit cur_head = readObject(join(commit, Commit.get_head()), Commit.class);
-
-
-            // I want to check if the there is untracked files in the working directory in the current commit
-            List<String> files = plainFilenamesIn(CWD);
-            for (String it : files) {
-                if (it.equals(".gitlet"))
-                    continue;
-                if (!cur_head.blobs.containsValue(it)) {
-                    System.out.println("There is an untracked file in the way; delete it or add it first.");
-                    System.exit(0);
-                }
-            }
-
-
-            // delete all the files in the working directory
-            for (String it : files) {
-                if (it.equals(".gitlet"))
-                    continue;
-
-                File x = new File(CWD, it);
-                x.delete();
-            }
-
-            // I want to add all files in the working directory from the commit
-
-            for (Map.Entry<String, String> it : target.blobs.entrySet()) {
-                File w = join(CWD, it.getValue());
-                File cp = join(blobs, it.getKey() + it.getValue());
-                w.createNewFile();
-                FileChannel src = new FileInputStream(cp).getChannel();
-                FileChannel dest = new FileOutputStream(w).getChannel();
-                dest.transferFrom(src, 0, src.size());
-            }
-
-            // change the head to the new commit and save the branch
-            Commit.readMap();
-            Commit.HEAD = sh1;
-
-            writeContents(join(GITLET_DIR, "HEAD"), Commit.HEAD);
-
-            branches.put(cur_branch, sh1);
-            Commit.save_branch();
-        }catch (IOException e) {
-            System.err.println("An error occurred: " + e.getMessage());
-            e.printStackTrace();
         }
+
+
+        // delete all the files in the working directory
+
+
+        // I want to add all files in the working directory from the commit
+
+//            for (Map.Entry<String, String> it : target.blobs.entrySet()) {
+//                File w = join(CWD, it.getValue());
+//                File cp = join(blobs, it.getKey() + it.getValue());
+//                w.createNewFile();
+//                FileChannel src = new FileInputStream(cp).getChannel();
+//                FileChannel dest = new FileOutputStream(w).getChannel();
+//                dest.transferFrom(src, 0, src.size());
+//            }
+
+        // change the head to the new commit and save the branch
+        Commit.readMap();
+        Commit.HEAD = sh1;
+
+        writeContents(join(GITLET_DIR, "HEAD"), Commit.HEAD);
+
+        branches.put(cur_branch, sh1);
+        Commit.save_branch();
 
     }
 
 
     public static void status() {
         Commit.readMap();
+        TreeMap<String, String> temp = new TreeMap<>();
+        temp.putAll(branches);
         System.out.println("=== Branches ===");
-        for (Map.Entry<String, String> it : branches.entrySet()) {
+        for (Map.Entry<String, String> it : temp.entrySet()) {
             if (it.getKey().equals(cur_branch))
                 System.out.println("*" + it.getKey());
             else
                 System.out.println(it.getKey());
+//            temp.put(it.getKey(),it.getValue());
         }
         System.out.println();
         System.out.println("=== Staged Files ===");
@@ -466,6 +494,17 @@ public class Repository {
     public static void merge(String name) {
         try {
             Commit.readMap();
+
+            File directory_add = new File(String.valueOf((Repository.addition)));
+            File[] add_blobs = directory_add.listFiles();
+            File directory_rem = new File(String.valueOf((Repository.removal)));
+            File[] rem_blobs = directory_rem.listFiles();
+            if (rem_blobs.length != 0 || add_blobs.length != 0) {
+                System.out.println("You have uncommitted changes.");
+                System.exit(0);
+            }
+
+
             if (!branches.containsKey(name)) {
                 System.out.println("A branch with that name does not exist.");
                 System.exit(0);
@@ -474,19 +513,59 @@ public class Repository {
                 System.out.println("Cannot merge a branch with itself.");
                 System.exit(0);
             }
-
-            String split_commit = Commit.split_point.get(new Pair(cur_branch, name));
-            if (split_commit.equals(Commit.HEAD)) {
-                System.out.println("Given branch is an ancestor of the current branch.");
-                System.exit(0);
+//            if(!Commit.split_point.containsKey(new Pair(cur_branch, name)))
+//            {
+//                System.out.println("WTF");
+//                System.exit(0);
+//            }
+            HashSet<String> temp = new HashSet<>();
+            temp.add(Commit.get_head());
+            Commit cur_com = readObject(join(commit, Commit.get_head()), Commit.class);
+            while (cur_com.get_parent().length() != 0) {
+                temp.add(cur_com.get_parent());
+                cur_com = readObject(join(commit, cur_com.get_parent()), Commit.class);
             }
-            if (split_commit.equals(branches.get(name))) {
+            String split_commit = "";
+            String sh = branches.get(name);
+            cur_com = readObject(join(commit, sh), Commit.class);
+            if (temp.contains(sh))
+                split_commit = new String(sh);
+            else
+                while (true) {
+
+                    if (temp.contains(cur_com.get_parent())) {
+                        split_commit = cur_com.get_parent();
+                        break;
+                    }
+                    cur_com = readObject(join(commit, cur_com.get_parent()), Commit.class);
+                }
+
+
+            for (Map.Entry<Pair, String> entry : Commit.split_point.entrySet()) {
+                Pair key = entry.getKey();
+                String value = entry.getValue();
+                //System.out.println(key.first + " " + key.second);
+
+                if (key.first.equals(cur_branch) && key.second.equals(name)) {
+                    split_commit = value;
+                    break;
+                }
+            }
+
+            if (split_commit.equals(Commit.get_head())) {
                 System.out.println("Current branch fast-forwarded.");
                 checkout(name);
                 System.exit(0);
             }
-            Commit cur = readObject(join(commit, Commit.HEAD), Commit.class);
+            if (split_commit.equals(branches.get(name))) {
+
+                System.out.println("Given branch is an ancestor of the current branch.");
+
+                System.exit(0);
+            }
+            Commit cur = readObject(join(commit, Commit.get_head()), Commit.class);
             Commit given = readObject(join(commit, branches.get(name)), Commit.class);
+            //System.out.println(split_commit);
             Commit split_point = readObject(join(commit, split_commit), Commit.class);
             HashMap<String, String> cur_blobs = cur.blobs;
             HashMap<String, String> given_blobs = given.blobs;
@@ -498,7 +577,7 @@ public class Repository {
                 if (it.equals(".gitlet"))
                     continue;
                 if (!cur_blobs.containsValue(it) && given_blobs.containsValue(it)) {
-                    System.out.println("There is an untracked file in the way; delete it or add it first.");
+                    System.out.println("There is an untracked file in the way; delete it, or add and commit it first.");
                     System.exit(0);
                 }
             }
@@ -528,56 +607,140 @@ public class Repository {
                         }
 
                         if (!sha1.equals(sha2)) {
-                            is_conflict = check_for_conflict(sha1, sha2, it);
+                            is_conflict = check_for_conflict(sha1, sha2, it.getValue());
                         }
                     }
                 } else if (cur_blobs.containsValue(it.getValue()) && !given_blobs.containsValue(it.getValue())) {
                     if (cur_blobs.containsKey(it.getKey())) {
                         rm(it.getValue());
                     } else {
+                        String sha1 = "";
+                        for (Map.Entry<String, String> it2 : cur_blobs.entrySet()) {
+                            if (it2.getValue().equals(it.getValue())) {
+                                sha1 = it2.getKey();
+                                break;
+                            }
+                        }
+
+
                         is_conflict = true;
+                        check_for_conflict(sha1, it.getValue());
                     }
 
                 } else if (!cur_blobs.containsValue(it.getValue()) && given_blobs.containsValue(it.getValue())) {
                     if (given_blobs.containsKey(it.getKey())) {
                         continue;
                     } else {
+                        String sha2 = "";
+                        for (Map.Entry<String, String> it2 : given_blobs.entrySet()) {
+                            if (it2.getValue().equals(it.getValue())) {
+                                sha2 = it2.getKey();
+                                break;
+                            }
+                        }
                         checkout(it.getValue(), branches.get(name));
                         add(it.getValue());
                         is_conflict = true;
+                        check_for_conflict(sha2, it.getValue());
                     }
                 }
             }
 
-            Commit new_commit = new Commit("Merged " + cur_branch + " with " + name + ".", false);
-            new_commit.parent = Commit.HEAD;
+            for (Map.Entry<String, String> it : given_blobs.entrySet()) {
+                if (!split_blobs.containsValue(it.getValue())) {
+                    if (cur_blobs.containsValue(it.getValue())) {
+                        if (cur_blobs.containsKey(it.getKey())) {
+                            continue;
+                        } else {
+                            String sha1 = "", sha2 = "";
+                            for (Map.Entry<String, String> it2 : cur_blobs.entrySet()) {
+                                if (it2.getValue().equals(it.getValue())) {
+                                    sha1 = it2.getKey();
+                                    break;
+                                }
+                            }
+
+                            for (Map.Entry<String, String> it2 : given_blobs.entrySet()) {
+                                if (it2.getValue().equals(it.getValue())) {
+                                    sha2 = it2.getKey();
+                                    break;
+                                }
+                            }
+
+                            if (!sha1.equals(sha2)) {
+                                is_conflict |= check_for_conflict(sha1, sha2, it.getValue());
+                            }
+                        }
+                    } else {
+                        checkout(it.getValue(), branches.get(name));
+                        add(it.getValue());
+                    }
+                }
+            }
+//            for (Map.Entry<String, String> it : cur_blobs.entrySet())
+//            {
+//
+//
+//            }
+
+
+            Commit new_commit = new Commit("Merged " + name + " into " + cur_branch + ".", false);
+            //new_commit.parent = Commit.get_head();
             new_commit.second_parent = branches.get(name);
             new_commit.save_branch();
 
             if (is_conflict) {
                 System.out.println("Encountered a merge conflict.");
             }
-        }catch (IOException e) {
+        } catch (IOException e) {
             System.err.println("An error occurred: " + e.getMessage());
             e.printStackTrace();
         }
     }
 
-    private static boolean check_for_conflict(String cur , String given, Map.Entry<String, String> it) throws IOException {
+    public static void appendToFile(File file, String content) {
+        try (FileWriter writer = new FileWriter(file, true)) {  // 'true' enables append mode
+            writer.write(content);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    private static boolean check_for_conflict(String cur, String given, String name) throws IOException {
 
 
         // conflict
-        File cur_file = join(blobs, cur + it.getValue());
-        File given_file = join(blobs, given + it.getValue());
-        File w = join(CWD, it.getValue());
+        File cur_file = join(blobs, cur + name);
+        File given_file = join(blobs, given + name);
+        File w = join(CWD, name);
+        w.delete();
         // i want to overwrite the w if it  exists
         w.createNewFile();
-        writeContents(w, "<<<<<<< HEAD\n");
-        writeContents(w, readContentsAsString(cur_file));
-        writeContents(w, "=======\n");
-        writeContents(w, readContentsAsString(given_file));
-        writeContents(w, ">>>>>>>\n");
-        add(it.getValue());
+        appendToFile(w, "<<<<<<< HEAD\n");
+        appendToFile(w, readContentsAsString(cur_file));
+        appendToFile(w, "=======\n");
+        appendToFile(w, readContentsAsString(given_file));
+        appendToFile(w, ">>>>>>>\n");
+        add(name);
+        return true;
+
+    }
+
+    private static boolean check_for_conflict(String cur, String name) throws IOException {
+        // conflict
+        File cur_file = join(blobs, cur + name);
+        File w = join(CWD, name);
+        w.delete();
+        // i want to overwrite the w if it  exists
+        w.createNewFile();
+        String s = "<<<<<<< HEAD\n";
+
+        s += readContentsAsString(cur_file);
+        s += "=======\n";
+        s += ">>>>>>>\n";
+        writeContents(w, s);
+        add(name);
         return true;
 
     }

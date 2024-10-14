@@ -22,8 +22,6 @@ public class Main {
             System.exit(0);
         }
         String firstArg = args[0];
-
-
         switch (firstArg) {
             case "init":
                 Repository.init();
