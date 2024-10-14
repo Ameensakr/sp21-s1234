@@ -527,7 +527,7 @@ public class Repository {
 
             if (split_commit.equals(Commit.get_head())) {
                 System.out.println("Current branch fast-forwarded.");
-                checkout(name);
+                checkout_branch(name);
                 System.exit(0);
             }
             if (split_commit.equals(branches.get(name))) {

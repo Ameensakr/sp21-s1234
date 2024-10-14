@@ -14,6 +14,12 @@ public class Main {
             System.exit(0);
         }
         String firstArg = args[0];
+        if(!firstArg.equals("init")) {
+            if (!Repository.GITLET_DIR.exists()) {
+                System.out.println("Not in an initialized Gitlet directory.");
+                System.exit(0);
+            }
+        }
         switch (firstArg) {
             case "init":
                 Repository.init();
@@ -74,6 +80,10 @@ public class Main {
             case "merge":
                 Repository.merge(args[1]);
                 break;
+
+            default:
+                System.out.println("No command with that name exists.");
+                System.exit(0);
         }
 
 
