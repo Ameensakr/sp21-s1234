@@ -147,6 +147,10 @@ public class Repository {
             HashMap<String, String> blobs = readObject(join(commit, Commit.get_head()), Commit.class).blobs;
             if (add.exists()) {
                 add.delete();
+                File temp = join(CWD, name);
+                writeContents(rem, arr);
+                rem.createNewFile();
+                temp.delete();
             } else if (blobs.containsValue(name)) {
                 File temp = join(CWD, name);
                 writeContents(rem, arr);
