@@ -143,11 +143,14 @@ public class Repository {
 
             File add = join(addition, sha1 + name);
             File rem = join(removal, sha1 + name);
-//        writeContents(add,arr);
 
             HashMap<String, String> blobs = readObject(join(commit, Commit.get_head()), Commit.class).blobs;
             if (add.exists()) {
                 add.delete();
+                File temp = join(CWD, name);
+                writeContents(rem, arr);
+                rem.createNewFile();
+                temp.delete();
             } else if (blobs.containsValue(name)) {
                 File temp = join(CWD, name);
                 writeContents(rem, arr);
@@ -352,15 +355,6 @@ public class Repository {
                 splet = it.getValue();
             }
         }
-//        String cur = branches.get(name);
-//        while(cur != splet) {
-//            Commit temp_com = readObject(join(commit, cur), Commit.class);
-//            for (Map.Entry<String, String> it : temp_com.blobs.entrySet()) {
-//                File f = join(blobs, it.getKey() + it.getValue());
-//                f.delete();
-//            }
-//            cur = temp_com.parent;
-//        }
 
         Commit.split_point.remove(temp);
 
@@ -393,8 +387,6 @@ public class Repository {
         for (String it : files) {
             if (it.equals(".gitlet"))
                 continue;
-//                if (it.equals(".gitlet"))
-//                    continue;
             if (cur_head.blobs.containsValue(it)) {
                 if(target.blobs.containsValue(it)) {
                     byte[] arr = readContents(join(CWD, it));
@@ -413,7 +405,6 @@ public class Repository {
 
                 }
 
-                //
                 else
                 {
 
@@ -430,20 +421,6 @@ public class Repository {
             }
         }
 
-
-        // delete all the files in the working directory
-
-
-        // I want to add all files in the working directory from the commit
-
-//            for (Map.Entry<String, String> it : target.blobs.entrySet()) {
-//                File w = join(CWD, it.getValue());
-//                File cp = join(blobs, it.getKey() + it.getValue());
-//                w.createNewFile();
-//                FileChannel src = new FileInputStream(cp).getChannel();
-//                FileChannel dest = new FileOutputStream(w).getChannel();
-//                dest.transferFrom(src, 0, src.size());
-//            }
 
         // change the head to the new commit and save the branch
         Commit.readMap();
