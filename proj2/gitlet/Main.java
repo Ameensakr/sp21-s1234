@@ -10,9 +10,10 @@ public class Main {
 
 
         if (args.length == 0) {
-            System.out.println("no comand");
+            System.out.println("Please enter a command.");
             System.exit(0);
         }
+
         String firstArg = args[0];
         if(!firstArg.equals("init")) {
             if (!Repository.GITLET_DIR.exists()) {
